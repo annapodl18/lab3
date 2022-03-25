@@ -31,56 +31,56 @@ int  main()
 
 
     long long size3 = size1 + size2;
-    long long *array3 = new long long[size3]; // Выделение памяти для массива
+    long long *array3 = new long long[size3]; 
 
 
-    long long* ptr_array1 = &array1[0]; // создаем переменную (указатель!), который указывает на адрес первого элемента в массиве
-    long long* end_array1 = &array1[size1]; // создаем переменную (указатель!), который указывает на адрес последнего элемента в массиве.
+    long long* ptr_array1 = &array1[0]; 
+    long long* end_array1 = &array1[size1]; 
     long long* ptr_array2 = &array2[0];
     long long* ptr_array3 = &array3[0];
-    long long* end_array3 = &array3[size3-1]; //
-	asm( // шок, дальше прога на ассембере
-        "mov %[ptr_array1], %%rax\n\t"  // поместим указатель на начало массива в rax
-        "mov %[ptr_array2], %%rbx\n\t"  // поместим указатель на начало массива в rbx
-        "mov %[ptr_array3], %%rcx\n\t"  // поместим указатель на начало массива в rcx
+    long long* end_array3 = &array3[size3-1]; 
+	asm( 
+        "mov %[ptr_array1], %%rax\n\t"  
+        "mov %[ptr_array2], %%rbx\n\t"  
+        "mov %[ptr_array3], %%rcx\n\t"  
         "mov (%%rax), %%rdx\n\t"        
 
 
  
 	"start1:\n\t" // функция 
-	"push (%%rax)\n\t"          // кладем в стек значение регистра rax (5) из-за скобок
-        "pop (%%rcx)\n\t"           // вытаскиваем значение из стека, в регистр rcx
-        "cmp %%rax, %[end_array1]\n\t" // проверка что достигнут конец, сравниванием адреса
-        "je start2\n\t"                // Если достигнут -> заполнение вторым массивом
-        "jmp next_element1\n\t"            // Переход на next_element
+	"push (%%rax)\n\t"          
+        "pop (%%rcx)\n\t"           
+        "cmp %%rax, %[end_array1]\n\t" 
+        "je start2\n\t"                
+        "jmp next_element1\n\t"            
 
 
 
 
 
-        "next_element1:\n\t" // функция если не дошли до конца, то переходим к след эл-ту первого массива
-        "add $8, %%rax\n\t"         // увеличить адрес в rax на 4 (переместили на один элемент вправо)
-        "add $8, %%rcx\n\t"         // увеличить адрес в rcx на 4 (переместили на один элемент вправо)
-        "mov (%%rax), %%rdx\n\t"    // поместим указатель на начало массива в rdx
+        "next_element1:\n\t" 
+        "add $8, %%rax\n\t"        
+        "add $8, %%rcx\n\t"         
+        "mov (%%rax), %%rdx\n\t"    
 	"jmp start1\n\t"
 
 
 	"start2:\n\t"
-        "push (%%rbx)\n\t"          // кладем в стек значение регистра ebx
-        "pop (%%rcx)\n\t"           // вытаскиваем значение из стека, в регистр rcx
-        "cmp %%rbx, %[end_array3]\n\t" // проверка что достигнут конец 
-        "je end\n\t"                // если достигнут - конец
-        "jmp next_element2\n\t"            // переход на next_element2
+        "push (%%rbx)\n\t"          
+        "pop (%%rcx)\n\t"           
+        "cmp %%rbx, %[end_array3]\n\t" 
+        "je end\n\t"                
+        "jmp next_element2\n\t"            
 
 
         "next_element2:\n\t"
-        "add $8, %%rbx\n\t"         // увеличить адрес в rax на 4 (переместили на один элемент вправо)
-        "add $8, %%rcx\n\t"         // увеличить адрес в rcx на 4 (переместили на один элемент вправо)
-        "mov (%%rax), %%rdx\n\t"    // поместим указатель на начало массива в rdx
+        "add $8, %%rbx\n\t"         
+        "add $8, %%rcx\n\t"         
+        "mov (%%rax), %%rdx\n\t"    
         "jmp start2\n\t"
         "end:\n\t"
         :
-    : [ptr_array1] "m"(ptr_array1), [ptr_array2]"m"(ptr_array2), [ptr_array3]"m"(ptr_array3), [end_array1]"m"(end_array1), [end_array3]"m"(end_array3) // переменные из С++ в Ассемблер
+    : [ptr_array1] "m"(ptr_array1), [ptr_array2]"m"(ptr_array2), [ptr_array3]"m"(ptr_array3), [end_array1]"m"(end_array1), [end_array3]"m"(end_array3) 
 
         : "%rax", "%rbx", "%rcx", "%rdx"
         );
@@ -91,8 +91,8 @@ int  main()
     }
     cout<<"\n";
 
-    delete [] array1; // очистка памяти
-    delete [] array2; // очистка памяти
-    delete [] array3; // очистка памяти
+    delete [] array1; 
+    delete [] array2; 
+    delete [] array3; 
     return 0;
 }
